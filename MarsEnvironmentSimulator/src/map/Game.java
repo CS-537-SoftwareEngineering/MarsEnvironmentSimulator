@@ -44,7 +44,7 @@ public class Game {
 	public void render() {
 		//Translate the screen to the camera
 		if(Program.top_view){ 
-			GLU.gluLookAt(0, 50, 0, 0, 0, 0, 1, 0, 0);
+			GLU.gluLookAt(0, 50, 0, 0, 0, 0, 0, 0, -1);
 		}
 		else{
 			GL11.glRotatef(camera.rotation.x, 1, 0, 0);
