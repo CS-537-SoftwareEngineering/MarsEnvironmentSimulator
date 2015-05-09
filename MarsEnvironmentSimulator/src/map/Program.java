@@ -17,6 +17,7 @@ public class Program {
 		
 		//Setup OpenGL for 3D projection
 		initGL3();
+		
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -47,6 +48,7 @@ public class Program {
 	static Game game;
 	static Vector3f cameraPosition = new Vector3f(0,1,0);
 	static Vector3f cameraRotation = new Vector3f();
+	static boolean top_view = false;
 
 	private static void update() {
 		game.update();
@@ -76,7 +78,7 @@ public class Program {
 	private static void clearGL(){
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		//Uncomment this if you want to see the map as a wireframe!
-		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+		//GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		GL11.glLoadIdentity();
 	}
 }

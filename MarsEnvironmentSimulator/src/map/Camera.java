@@ -69,6 +69,13 @@ public class Camera {
 			Display.destroy();
 			System.exit(0);
 		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_V)){
+			if(Program.top_view){
+				Program.top_view = false;
+			}else{
+				Program.top_view = true;
+			}
+		}
 		if(Mouse.isGrabbed()){
 			float mouseDX = Mouse.getDX() * 0.8f * 0.16f;
 			float mouseDY = Mouse.getDY() * 0.8f * 0.16f;
