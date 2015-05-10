@@ -1986,7 +1986,7 @@ extends java.lang.Object</pre>
  
  <p>If the definition for the named class is not registered, this function calls the class handler callback and then checks a second time to see if the
  class is registered. However, every class definition must have a valid metaclass definition, and so the metaclass definition is always returned,
- whether it’s valid or not.</p></div>
+ whether itâ€™s valid or not.</p></div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - the name of the class to look up</dd>
 <dt><span class="strong">Returns:</span></dt><dd>the Class object for the metaclass of the named class, or <a href="../../../../org/lwjgl/system/macosx/ObjCRuntime.html#nil"><code>ObjCRuntime.nil</code></a> if the class is not registered with the Objective-C runtime</dd></dl>
 </li>
@@ -2319,7 +2319,7 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;<a href="../../../../org/lwjgl/PointerBuffer.html" title="class in org.lwjgl">PointerBuffer</a>&nbsp;class_copyMethodList(long&nbsp;cls)</pre>
 <div class="block">Describes the instance methods implemented by a class.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>cls</code> - the class you want to inspect</dd>
-<dt><span class="strong">Returns:</span></dt><dd>an array of pointers of type Method describing the instance methods implemented by the class—any instance methods implemented by superclasses are not
+<dt><span class="strong">Returns:</span></dt><dd>an array of pointers of type Method describing the instance methods implemented by the classâ€”any instance methods implemented by superclasses are not
          included. The array contains <code>*outCount</code> pointers followed by a <code>NULL</code> terminator. You must free the array with free().
          
          <p>If <code>cls</code> implements no instance methods, or <code>cls</code> is Nil, returns <code>NULL</code> and <code>*outCount</code> is 0.</p></dd></dl>
@@ -2447,7 +2447,7 @@ extends java.lang.Object</pre>
  class_addMethod([self class], @selector(resolveThisMethodDynamically), (IMP) myMethodIMP, "v@:");</code></pre></p></div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>cls</code> - the class to which to add a method</dd><dd><code>name</code> - a selector that specifies the name of the method being added</dd><dd><code>imp</code> - a function which is the implementation of the new method. The function must take at least two arguments &ndash; <code>self</code> and <code>_cmd</code>.</dd><dd><code>types</code> - an array of characters that describe the types of the arguments to the method. For possible values, see <em>Objective-C Runtime Programming Guide
               &gt; Type Encodings in Objective-C Runtime Programming Guide. Since the function must take at least two arguments &ndash; <code>self</code> and
-              <code>_cmd</code>, the second and third characters must be “@:” (the first character is the return type).</dd>
+              <code>_cmd</code>, the second and third characters must be (the first character is the return type).</dd>
 <dt><span class="strong">Returns:</span></dt><dd><a href="../../../../org/lwjgl/system/macosx/ObjCRuntime.html#YES"><code>ObjCRuntime.YES</code></a> if the method was added successfully, otherwise <a href="../../../../org/lwjgl/system/macosx/ObjCRuntime.html#NO"><code>ObjCRuntime.NO</code></a> (for example, the class already contains a method implementation with that name)</dd></dl>
 </li>
 </ul>
@@ -2486,7 +2486,7 @@ extends java.lang.Object</pre>
  </ul></div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>cls</code> - the class you want to modify</dd><dd><code>name</code> - a selector that identifies the method whose implementation you want to replace</dd><dd><code>imp</code> - the new implementation for the method identified by <code>name</code> for the class identified by <code>cls</code></dd><dd><code>types</code> - an array of characters that describe the types of the arguments to the method. For possible values, see <em>Objective-C Runtime Programming Guide
               &gt; Type Encodings in Objective-C Runtime Programming Guide. Since the function must take at least two arguments &ndash; <code>self</code> and
-              <code>_cmd</code>, the second and third characters must be “@:” (the first character is the return type).</dd>
+              <code>_cmd</code>, the second and third characters must be â€œ@:â€� (the first character is the return type).</dd>
 <dt><span class="strong">Returns:</span></dt><dd>the previous implementation of the method identified by <code>name</code> for the class identified by <code>cls</code></dd></dl>
 </li>
 </ul>
@@ -2521,7 +2521,7 @@ extends java.lang.Object</pre>
  
  <p>The class must not be a metaclass. Adding an instance variable to a metaclass is not supported.</p>
  
- <p>The instance variable's minimum alignment in bytes is <code style="font-family: monospace">1<<align</code>. The minimum alignment of an instance variable depends on the ivar's type and
+ <p>The instance variable's minimum alignment in bytes is <code style="font-family: monospace">1</code>. The minimum alignment of an instance variable depends on the ivar's type and
  the machine architecture. For variables of any pointer type, pass <code style="font-family: monospace">log2(sizeof(pointer_type))</code>.</p></div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>cls</code> - </dd><dd><code>name</code> - </dd><dd><code>size</code> - </dd><dd><code>alignment</code> - </dd><dd><code>types</code> - </dd>
 <dt><span class="strong">Returns:</span></dt><dd><a href="../../../../org/lwjgl/system/macosx/ObjCRuntime.html#YES"><code>ObjCRuntime.YES</code></a> if the instance variable was added successfully, otherwise <a href="../../../../org/lwjgl/system/macosx/ObjCRuntime.html#NO"><code>ObjCRuntime.NO</code></a> (for example, the class already contains an instance variable with that name)</dd></dl>
@@ -3491,7 +3491,7 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;long&nbsp;sel_registerName(java.nio.ByteBuffer&nbsp;str)</pre>
 <div class="block">Registers a method with the Objective-C runtime system, maps the method name to a selector, and returns the selector value.
  
- <p>You must register a method name with the Objective-C runtime system to obtain the method’s selector before you can add the method to a class
+ <p>You must register a method name with the Objective-C runtime system to obtain the methodâ€™s selector before you can add the method to a class
  definition. If the method name has already been registered, this function simply returns the selector.</p></div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>str</code> - a pointer to a C string. Pass the name of the method you wish to register</dd>
 <dt><span class="strong">Returns:</span></dt><dd>a pointer of type SEL specifying the selector for the named method</dd></dl>
@@ -3556,7 +3556,7 @@ extends java.lang.Object</pre>
 <h4>imp_implementationWithBlock</h4>
 <pre>public static&nbsp;long&nbsp;imp_implementationWithBlock(long&nbsp;block)</pre>
 <div class="block">Creates a pointer to a function that calls the specified block when the method is called.</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>block</code> - the block that implements this method. The signature of <code>block</code> should be <code style="font-family: monospace">method_return_type ^(id self, self, method_args …)</code>. The
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>block</code> - the block that implements this method. The signature of <code>block</code> should be <code style="font-family: monospace">method_return_type ^(id self, self, method_args â€¦)</code>. The
               selector of the method is not available to <code>block</code>. <code>block</code> is copied with <code style="font-family: monospace">Block_copy()</code>.</dd>
 <dt><span class="strong">Returns:</span></dt><dd>the IMP that calls <code>block</code>. You must dispose of the returned IMP using the function.</dd></dl>
 </li>
