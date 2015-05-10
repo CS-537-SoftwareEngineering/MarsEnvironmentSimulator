@@ -15,6 +15,7 @@ public class Game {
 	Camera camera = new Camera(this);
 	Heightmap heightmap;
 	Texture floor;
+	Rover rover = new Rover(0,0,0);
 	
 	int terrainPtr;
 	public static final int heightmapExaggeration = 7;
@@ -57,9 +58,15 @@ public class Game {
 		//Bi-linear interpolation to calculate where the player should be vertically on the terrain.
 		camera.vector.y = heightmap.calculateHeight(camera.vector.x*4, camera.vector.z*4)*heightmapExaggeration;
 
+		
+	
+		
 		//Bind the grass texture, and call the terrain from video memory.
 		floor.bind();
 		GL11.glCallList(terrainPtr);
+		
+		rover.renderRover(-camera.vector.x,camera.vector.y+1.4f,-camera.vector.z);
+		
 	}
 	
 	public void generateLists(){
@@ -73,7 +80,7 @@ public class Game {
 		GL11.glBegin(GL11.GL_QUADS);
 		for(int x=0;x<heightmap.height.length;x++){
 			for(int y=0;y<heightmap.height[x].length;y++){
-				float c = 0.1f+(rng.nextFloat()/5f);
+				//float c = 0.1f+(rng.nextFloat()/5f);
 				float color = heightmap.getHeightAt(x, y);
 				GL11.glColor3f(color, color, color);
 				GL11.glTexCoord2f(0, 0);

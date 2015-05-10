@@ -49,6 +49,7 @@ public class Program {
 	static Vector3f cameraPosition = new Vector3f(0,1,0);
 	static Vector3f cameraRotation = new Vector3f();
 	static boolean top_view = false;
+	 
 
 	private static void update() {
 		game.update();
@@ -58,6 +59,7 @@ public class Program {
 		initGL3();
 		
 		game.render();
+	
 	}
 
 	private static void initGL3(){
