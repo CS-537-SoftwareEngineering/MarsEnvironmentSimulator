@@ -113,18 +113,31 @@ public class Camera {
 		if(moveForward){
 			vector.x += Math.sin(rotation.y*Math.PI/180)*speed;
 			vector.z += -Math.cos(rotation.y*Math.PI/180)*speed;
+			
+			Game.rover.x += Math.sin(rotation.y*Math.PI/180)*speed;
+			Game.rover.z += -Math.cos(rotation.y*Math.PI/180)*speed;
 		}
 		if(moveBackward){
 			vector.x -= Math.sin(rotation.y*Math.PI/180)*speed;
 			vector.z -= -Math.cos(rotation.y*Math.PI/180)*speed;
+			
+			Game.rover.x -= Math.sin(rotation.y*Math.PI/180)*speed;
+			Game.rover.z -= -Math.cos(rotation.y*Math.PI/180)*speed;
 		}
 		if(strafeLeft){
 			vector.x += Math.sin((rotation.y-90)*Math.PI/180)*speed;
 			vector.z += -Math.cos((rotation.y-90)*Math.PI/180)*speed;
+			
+			Game.rover.x += Math.sin((rotation.y-90)*Math.PI/180)*speed;
+			Game.rover.z += -Math.cos((rotation.y-90)*Math.PI/180)*speed;
 		}
 		if(strafeRight){
 			vector.x += Math.sin((rotation.y+90)*Math.PI/180)*speed;
 			vector.z += -Math.cos((rotation.y+90)*Math.PI/180)*speed;
+			
+			Game.rover.x += Math.sin((rotation.y+90)*Math.PI/180)*speed;
+			Game.rover.z += -Math.cos((rotation.y+90)*Math.PI/180)*speed;
+			
 		}
 	}
 }

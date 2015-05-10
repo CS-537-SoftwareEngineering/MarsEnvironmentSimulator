@@ -15,7 +15,7 @@ public class Game {
 	Camera camera = new Camera(this);
 	Heightmap heightmap;
 	Texture floor;
-	Rover rover = new Rover(0,0,0);
+	static Rover rover = new Rover();
 	
 	int terrainPtr;
 	public static final int heightmapExaggeration = 7;
@@ -59,13 +59,13 @@ public class Game {
 		camera.vector.y = heightmap.calculateHeight(camera.vector.x*4, camera.vector.z*4)*heightmapExaggeration;
 
 		
-	
+		rover.renderRover(camera.vector.y+.5f);
 		
 		//Bind the grass texture, and call the terrain from video memory.
 		floor.bind();
 		GL11.glCallList(terrainPtr);
 		
-		rover.renderRover(-camera.vector.x,camera.vector.y+1.4f,-camera.vector.z);
+		
 		
 	}
 	
