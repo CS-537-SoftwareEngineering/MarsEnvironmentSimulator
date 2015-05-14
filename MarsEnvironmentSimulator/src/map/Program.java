@@ -17,6 +17,7 @@ public class Program {
 		
 		//Setup OpenGL for 3D projection
 		initGL3();
+		
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -47,6 +48,8 @@ public class Program {
 	static Game game;
 	static Vector3f cameraPosition = new Vector3f(0,1,0);
 	static Vector3f cameraRotation = new Vector3f();
+	static boolean top_view = false;
+	 
 
 	private static void update() {
 		game.update();
@@ -56,6 +59,7 @@ public class Program {
 		initGL3();
 		
 		game.render();
+	
 	}
 
 	private static void initGL3(){

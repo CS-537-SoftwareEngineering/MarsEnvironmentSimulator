@@ -69,6 +69,13 @@ public class Camera {
 			Display.destroy();
 			System.exit(0);
 		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_V)){
+			if(Program.top_view){
+				Program.top_view = false;
+			}else{
+				Program.top_view = true;
+			}
+		}
 		if(Mouse.isGrabbed()){
 			float mouseDX = Mouse.getDX() * 0.8f * 0.16f;
 			float mouseDY = Mouse.getDY() * 0.8f * 0.16f;
@@ -106,18 +113,31 @@ public class Camera {
 		if(moveForward){
 			vector.x += Math.sin(rotation.y*Math.PI/180)*speed;
 			vector.z += -Math.cos(rotation.y*Math.PI/180)*speed;
+			
+			Game.rover.x += Math.sin(rotation.y*Math.PI/180)*speed;
+			Game.rover.z += -Math.cos(rotation.y*Math.PI/180)*speed;
 		}
 		if(moveBackward){
 			vector.x -= Math.sin(rotation.y*Math.PI/180)*speed;
 			vector.z -= -Math.cos(rotation.y*Math.PI/180)*speed;
+			
+			Game.rover.x -= Math.sin(rotation.y*Math.PI/180)*speed;
+			Game.rover.z -= -Math.cos(rotation.y*Math.PI/180)*speed;
 		}
 		if(strafeLeft){
 			vector.x += Math.sin((rotation.y-90)*Math.PI/180)*speed;
 			vector.z += -Math.cos((rotation.y-90)*Math.PI/180)*speed;
+			
+			Game.rover.x += Math.sin((rotation.y-90)*Math.PI/180)*speed;
+			Game.rover.z += -Math.cos((rotation.y-90)*Math.PI/180)*speed;
 		}
 		if(strafeRight){
 			vector.x += Math.sin((rotation.y+90)*Math.PI/180)*speed;
 			vector.z += -Math.cos((rotation.y+90)*Math.PI/180)*speed;
+			
+			Game.rover.x += Math.sin((rotation.y+90)*Math.PI/180)*speed;
+			Game.rover.z += -Math.cos((rotation.y+90)*Math.PI/180)*speed;
+			
 		}
 	}
 }

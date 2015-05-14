@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
@@ -14,6 +15,7 @@ public class Game {
 	Camera camera = new Camera(this);
 	Heightmap heightmap;
 	Texture floor;
+	static Rover rover = new Rover();
 	
 	int terrainPtr;
 	public static final int heightmapExaggeration = 7;
@@ -29,7 +31,7 @@ public class Game {
 		
 		//Load grass texture
 		try {
-			floor = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream("img/white.jpg"));
+			floor = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream("img/sand.jpg"));
 			System.out.println("Textures loaded successfully.");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -42,18 +44,29 @@ public class Game {
 
 	public void render() {
 		//Translate the screen to the camera
-		GL11.glRotatef(camera.rotation.x, 1, 0, 0);
-		GL11.glRotatef(camera.rotation.y, 0, 1, 0);
-		GL11.glRotatef(camera.rotation.z, 0, 0, 1);
+		if(Program.top_view){ 
+			GLU.gluLookAt(0, 50, 0, 0, 0, 0, 0, 0, -1);
+		}
+		else{
+			GL11.glRotatef(camera.rotation.x, 1, 0, 0);
+			GL11.glRotatef(camera.rotation.y, 0, 1, 0);
+			GL11.glRotatef(camera.rotation.z, 0, 0, 1);
+		}
 		//Note: Camera's head is 1.4px above it's y value.
 		GL11.glTranslatef(-camera.vector.x, -camera.vector.y-1.4f, -camera.vector.z);
 		
 		//Bi-linear interpolation to calculate where the player should be vertically on the terrain.
 		camera.vector.y = heightmap.calculateHeight(camera.vector.x*4, camera.vector.z*4)*heightmapExaggeration;
 
+		
+		rover.renderRover(camera.vector.y+.5f);
+		
 		//Bind the grass texture, and call the terrain from video memory.
 		floor.bind();
 		GL11.glCallList(terrainPtr);
+		
+		
+		
 	}
 	
 	public void generateLists(){
@@ -63,11 +76,13 @@ public class Game {
 		//Doing this sped things up a lot, even for my 3.5GHz 6-core CPU, 1GB GTX 650 Ti setup.
 		terrainPtr = GL11.glGenLists(1);
 		GL11.glNewList(terrainPtr, GL11.GL_COMPILE);
+		
 		GL11.glBegin(GL11.GL_QUADS);
 		for(int x=0;x<heightmap.height.length;x++){
 			for(int y=0;y<heightmap.height[x].length;y++){
-				float c = 0.1f+(rng.nextFloat()/5f);
-				GL11.glColor3f(c, 1, c);
+				//float c = 0.1f+(rng.nextFloat()/5f);
+				float color = heightmap.getHeightAt(x, y);
+				GL11.glColor3f(color, color, color);
 				GL11.glTexCoord2f(0, 0);
 				GL11.glVertex3f(x*0.25f, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*0.25f);
 				GL11.glTexCoord2f(1, 0);
