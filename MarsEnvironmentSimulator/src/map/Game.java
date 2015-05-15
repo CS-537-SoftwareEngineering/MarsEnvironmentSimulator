@@ -82,14 +82,26 @@ public class Game {
 			for(int y=0;y<heightmap.height[x].length;y++){
 				//float c = 0.1f+(rng.nextFloat()/5f);
 				float color = heightmap.getHeightAt(x, y);
-				GL11.glColor3f(color, color, color);
+				float[] p1 = {x*0.25f, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*0.25f};
+				float[] p2 = {(x+1)*0.25f, heightmap.getHeightAt(x+1, y)*heightmapExaggeration, y*0.25f};
+				float[] p3 = {(x+1)*0.25f, heightmap.getHeightAt(x+1, y+1)*heightmapExaggeration, (y+1)*0.25f};
+				float[] p4 = {x*0.25f, heightmap.getHeightAt(x, y+1)*heightmapExaggeration, (y+1)*0.25f};
+				GL11.glColor3f(1.0f, 1.0f, 1.0f);
 				GL11.glTexCoord2f(0, 0);
+				float[] n = Vector.getNormal(p1, p2, p4);
+				GL11.glNormal3f(n[0], n[1], n[2]);
 				GL11.glVertex3f(x*0.25f, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*0.25f);
 				GL11.glTexCoord2f(1, 0);
+				n = Vector.getNormal(p2, p1, p3);
+				GL11.glNormal3f(n[0], n[1], n[2]);
 				GL11.glVertex3f((x+1)*0.25f, heightmap.getHeightAt(x+1, y)*heightmapExaggeration, y*0.25f);
 				GL11.glTexCoord2f(1, 1);
+				n = Vector.getNormal(p3, p4, p2);
+				GL11.glNormal3f(n[0], n[1], n[2]);
 				GL11.glVertex3f((x+1)*0.25f, heightmap.getHeightAt(x+1, y+1)*heightmapExaggeration, (y+1)*0.25f);
 				GL11.glTexCoord2f(0, 1);
+				n = Vector.getNormal(p4, p1, p3);
+				GL11.glNormal3f(n[0], n[1], n[2]);
 				GL11.glVertex3f(x*0.25f, heightmap.getHeightAt(x, y+1)*heightmapExaggeration, (y+1)*0.25f);
 			}
 		}
