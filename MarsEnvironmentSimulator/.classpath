@@ -2,5 +2,21 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="E:/Workspace-CS537/Demo/lib/jar/slick-util.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Workspace-CS537/MarsEnvironmentSimulator/MarsEnvironmentSimulator/lib/native/windows/x64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="E:/Workspace-CS537/Demo/lib/jar/lwjgl_util.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Workspace-CS537/MarsEnvironmentSimulator/MarsEnvironmentSimulator/lib/native/windows/x64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="E:/Workspace-CS537/Demo/lib/jar/lwjgl.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/E:/Workspace-CS537/MarsEnvironmentSimulator/MarsEnvironmentSimulator/lib/doc/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Workspace-CS537/MarsEnvironmentSimulator/MarsEnvironmentSimulator/lib/native/windows/x64"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
