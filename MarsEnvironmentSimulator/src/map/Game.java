@@ -13,7 +13,7 @@ public class Game {
 
 	Random rng = new Random();
 	Camera camera = new Camera(this);
-	Heightmap heightmap;
+	static Heightmap heightmap;
 	Texture floor;
 	static Rover rover = new Rover();
 	
