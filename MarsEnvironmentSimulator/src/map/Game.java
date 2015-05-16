@@ -22,7 +22,7 @@ public class Game {
 
 	public Game(){
 		//Load the heightmap from file height.jpg (See Heightmap.java)
-		heightmap = new Heightmap("img/MarsPartial.jpg");
+		heightmap = new Heightmap("img/map3.jpg");
 		System.out.println("Loaded heightmap.");
 		
 		//Generate the terrain and store in video memory
@@ -82,15 +82,16 @@ public class Game {
 			for(int y=0;y<heightmap.height[x].length;y++){
 				//float c = 0.1f+(rng.nextFloat()/5f);
 				float color = heightmap.getHeightAt(x, y);
+				float scale = (float) 10.0;
 				GL11.glColor3f(color, color, color);
 				GL11.glTexCoord2f(0, 0);
-				GL11.glVertex3f(x*0.25f, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*0.25f);
+				GL11.glVertex3f(x*scale, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*scale);
 				GL11.glTexCoord2f(1, 0);
-				GL11.glVertex3f((x+1)*0.25f, heightmap.getHeightAt(x+1, y)*heightmapExaggeration, y*0.25f);
+				GL11.glVertex3f((x+1)*scale, heightmap.getHeightAt(x+1, y)*heightmapExaggeration, y*scale);
 				GL11.glTexCoord2f(1, 1);
-				GL11.glVertex3f((x+1)*0.25f, heightmap.getHeightAt(x+1, y+1)*heightmapExaggeration, (y+1)*0.25f);
+				GL11.glVertex3f((x+1)*scale, heightmap.getHeightAt(x+1, y+1)*heightmapExaggeration, (y+1)*scale);
 				GL11.glTexCoord2f(0, 1);
-				GL11.glVertex3f(x*0.25f, heightmap.getHeightAt(x, y+1)*heightmapExaggeration, (y+1)*0.25f);
+				GL11.glVertex3f(x*scale, heightmap.getHeightAt(x, y+1)*heightmapExaggeration, (y+1)*scale);
 			}
 		}
 		GL11.glEnd();
