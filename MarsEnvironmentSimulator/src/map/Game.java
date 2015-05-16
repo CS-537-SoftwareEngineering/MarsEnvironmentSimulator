@@ -13,7 +13,7 @@ public class Game {
 
 	Random rng = new Random();
 	Camera camera = new Camera(this);
-	Heightmap heightmap;
+	static Heightmap heightmap;
 	Texture floor;
 	static Rover rover = new Rover();
 	
@@ -22,7 +22,7 @@ public class Game {
 
 	public Game(){
 		//Load the heightmap from file height.jpg (See Heightmap.java)
-		heightmap = new Heightmap("img/map3.jpg");
+		heightmap = new Heightmap("img/map2.jpg");
 		System.out.println("Loaded heightmap.");
 		
 		//Generate the terrain and store in video memory
@@ -82,7 +82,7 @@ public class Game {
 			for(int y=0;y<heightmap.height[x].length;y++){
 				//float c = 0.1f+(rng.nextFloat()/5f);
 				float color = heightmap.getHeightAt(x, y);
-				float scale = (float) 10.0;
+				float scale = (float) .25;
 				GL11.glColor3f(color, color, color);
 				GL11.glTexCoord2f(0, 0);
 				GL11.glVertex3f(x*scale, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*scale);

@@ -1,4 +1,5 @@
 package map;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -6,77 +7,89 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
 
-	
 	/*
-	 *  NOTE ------------
-	 *  This is actually a rip of code from the qjuake engine
-	 *  that has been ripped up to rid of the gravity and jumping.
-	 *  Unfortunately, the variables for gravity/jumping are still here
-	 *  doing nothing at all. Just ignore them. Or re-implement jumping/gravity.
-	 *  That should be fun.
+	 * NOTE ------------ This is actually a rip of code from the qjuake engine
+	 * that has been ripped up to rid of the gravity and jumping. Unfortunately,
+	 * the variables for gravity/jumping are still here doing nothing at all.
+	 * Just ignore them. Or re-implement jumping/gravity. That should be fun.
 	 */
-	
-	static final float walkSpeed = 0.035f, runSpeed = 0.5f, sprintSpeed = 0.18f;
+
+	static final float walkSpeed = 0.035f, runSpeed = 0.5f,
+			sprintSpeed = 0.18f;
 	static float speed = runSpeed;
 
 	Vector3f vector = new Vector3f();
 	Vector3f rotation = new Vector3f();
 	Vector3f previous = new Vector3f();
-	boolean moveForward=false, moveBackward=false, strafeLeft=false, strafeRight=false;
-	boolean onGround=false, jumping=false, falling=false;
-	boolean walking=false, running=true, sprinting=false;
+	boolean moveForward = false, moveBackward = false, strafeLeft = false,
+			strafeRight = false;
+	boolean onGround = false, jumping = false, falling = false;
+	boolean walking = false, running = true, sprinting = false;
 	Game world;
-	float yBottom=0;
-	float yMotion=0;
+	float yBottom = 0;
+	float yMotion = 0;
 	final float gravity = 0.0155f;
 
-	public Camera(Game app){
+	public Camera(Game app) {
 		world = app;
 	}
 
-	public void update(){
+	public void update() {
 		updatePreviousVector();
 		updateMotion();
 		input();
 	}
 
-	public void input(){
-		if(Keyboard.isKeyDown(Keyboard.KEY_W)){
+	public void input() {
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			moveForward = true;
-		}else{
+		} else {
 			moveForward = false;
 		}
 
-		if(Keyboard.isKeyDown(Keyboard.KEY_S)){
+		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
 			moveBackward = true;
-		}else{
+		} else {
 			moveBackward = false;
 		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_A)){
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			strafeLeft = true;
-		}else{
+		} else {
 			strafeLeft = false;
 		}
 
-		if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			strafeRight = true;
-		}else{
+		} else {
 			strafeRight = false;
 		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
 			Display.destroy();
 			System.exit(0);
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_V)){
-			if(Program.top_view){
+		if (Keyboard.isKeyDown(Keyboard.KEY_V)) {
+			if (Program.top_view) {
 				Program.top_view = false;
-			}else{
+			} else {
 				Program.top_view = true;
 			}
 		}
-		if(Mouse.isGrabbed()){
+		if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
+		//	System.out.println(Game.heightmap.toString());
+			System.out.println("{");
+			for (int x = 0; x < Game.heightmap.height.length; x++) {
+				System.out.print("{");
+				for (int z = 0; z < Game.heightmap.height[x].length-1; z++) {
+					System.out.print(Game.heightmap.getHeightAt(x, z)*Game.heightmapExaggeration + ",");
+				}
+				System.out.print(Game.heightmap.getHeightAt(x,Game.heightmap.height[x].length)*Game.heightmapExaggeration);
+				System.out.println("}");
+			}
+			System.out.println("}");//*/
+		}
+		if (Mouse.isGrabbed()) {
 			float mouseDX = Mouse.getDX() * 0.8f * 0.16f;
 			float mouseDY = Mouse.getDY() * 0.8f * 0.16f;
 			if (rotation.y + mouseDX >= 360) {
@@ -96,48 +109,50 @@ public class Camera {
 		}
 	}
 
-	public void updatePreviousVector(){
+	public void updatePreviousVector() {
 		previous.x = vector.x;
 		previous.y = vector.y;
 		previous.z = vector.z;
 	}
 
-	public void updateMotion(){
-		if(walking && !sprinting){
+	public void updateMotion() {
+		if (walking && !sprinting) {
 			speed = walkSpeed;
-		}else if(!walking && sprinting){
+		} else if (!walking && sprinting) {
 			speed = sprintSpeed;
-		}else if(running){
+		} else if (running) {
 			speed = runSpeed;
 		}
-		if(moveForward){
-			vector.x += Math.sin(rotation.y*Math.PI/180)*speed;
-			vector.z += -Math.cos(rotation.y*Math.PI/180)*speed;
-			
-			Game.rover.x += Math.sin(rotation.y*Math.PI/180)*speed;
-			Game.rover.z += -Math.cos(rotation.y*Math.PI/180)*speed;
+		if (moveForward) {
+			vector.x += Math.sin(rotation.y * Math.PI / 180) * speed;
+			vector.z += -Math.cos(rotation.y * Math.PI / 180) * speed;
+
+			Game.rover.x += Math.sin(rotation.y * Math.PI / 180) * speed;
+			Game.rover.z += -Math.cos(rotation.y * Math.PI / 180) * speed;
 		}
-		if(moveBackward){
-			vector.x -= Math.sin(rotation.y*Math.PI/180)*speed;
-			vector.z -= -Math.cos(rotation.y*Math.PI/180)*speed;
-			
-			Game.rover.x -= Math.sin(rotation.y*Math.PI/180)*speed;
-			Game.rover.z -= -Math.cos(rotation.y*Math.PI/180)*speed;
+		if (moveBackward) {
+			vector.x -= Math.sin(rotation.y * Math.PI / 180) * speed;
+			vector.z -= -Math.cos(rotation.y * Math.PI / 180) * speed;
+
+			Game.rover.x -= Math.sin(rotation.y * Math.PI / 180) * speed;
+			Game.rover.z -= -Math.cos(rotation.y * Math.PI / 180) * speed;
 		}
-		if(strafeLeft){
-			vector.x += Math.sin((rotation.y-90)*Math.PI/180)*speed;
-			vector.z += -Math.cos((rotation.y-90)*Math.PI/180)*speed;
-			
-			Game.rover.x += Math.sin((rotation.y-90)*Math.PI/180)*speed;
-			Game.rover.z += -Math.cos((rotation.y-90)*Math.PI/180)*speed;
+		if (strafeLeft) {
+			vector.x += Math.sin((rotation.y - 90) * Math.PI / 180) * speed;
+			vector.z += -Math.cos((rotation.y - 90) * Math.PI / 180) * speed;
+
+			Game.rover.x += Math.sin((rotation.y - 90) * Math.PI / 180) * speed;
+			Game.rover.z += -Math.cos((rotation.y - 90) * Math.PI / 180)
+					* speed;
 		}
-		if(strafeRight){
-			vector.x += Math.sin((rotation.y+90)*Math.PI/180)*speed;
-			vector.z += -Math.cos((rotation.y+90)*Math.PI/180)*speed;
-			
-			Game.rover.x += Math.sin((rotation.y+90)*Math.PI/180)*speed;
-			Game.rover.z += -Math.cos((rotation.y+90)*Math.PI/180)*speed;
-			
+		if (strafeRight) {
+			vector.x += Math.sin((rotation.y + 90) * Math.PI / 180) * speed;
+			vector.z += -Math.cos((rotation.y + 90) * Math.PI / 180) * speed;
+
+			Game.rover.x += Math.sin((rotation.y + 90) * Math.PI / 180) * speed;
+			Game.rover.z += -Math.cos((rotation.y + 90) * Math.PI / 180)
+					* speed;
+
 		}
 	}
 }
