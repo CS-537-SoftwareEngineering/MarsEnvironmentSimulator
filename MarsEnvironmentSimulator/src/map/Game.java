@@ -22,7 +22,7 @@ public class Game {
 
 	public Game(){
 		//Load the heightmap from file height.jpg (See Heightmap.java)
-		heightmap = new Heightmap("img/MarsPartial.jpg");
+		heightmap = new Heightmap("img/map2.jpg");
 		System.out.println("Loaded heightmap.");
 		
 		//Generate the terrain and store in video memory
