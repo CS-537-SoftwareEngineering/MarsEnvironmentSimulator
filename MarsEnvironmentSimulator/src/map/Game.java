@@ -44,29 +44,28 @@ public class Game {
 
 	public void render() {
 		//Translate the screen to the camera
+		// Show first person view
 		if(Program.top_view){ 
-			GLU.gluLookAt(0, 50, 0, 0, 0, 0, 0, 0, -1);
-		}
-		else{
 			GL11.glRotatef(camera.rotation.x, 1, 0, 0);
 			GL11.glRotatef(camera.rotation.y, 0, 1, 0);
 			GL11.glRotatef(camera.rotation.z, 0, 0, 1);
+		}
+		// Show top view
+		else{
+			// GLU.gluLookAt(0, 50, 0, 0, 0, 0, 0, 0, -1);
+			GLU.gluLookAt(2, 2, 2, 0, 0, 0, -1, 1, -1);
 		}
 		//Note: Camera's head is 1.4px above it's y value.
 		GL11.glTranslatef(-camera.vector.x, -camera.vector.y-1.4f, -camera.vector.z);
 		
 		//Bi-linear interpolation to calculate where the player should be vertically on the terrain.
 		camera.vector.y = heightmap.calculateHeight(camera.vector.x*4, camera.vector.z*4)*heightmapExaggeration;
-
 		
 		rover.renderRover(camera.vector.y+.5f);
 		
 		//Bind the grass texture, and call the terrain from video memory.
 		floor.bind();
 		GL11.glCallList(terrainPtr);
-		
-		
-		
 	}
 	
 	public void generateLists(){

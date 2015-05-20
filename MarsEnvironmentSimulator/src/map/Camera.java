@@ -14,21 +14,22 @@ public class Camera {
 	 * Just ignore them. Or re-implement jumping/gravity. That should be fun.
 	 */
 
-	static final float walkSpeed = 0.035f, runSpeed = 0.5f,
-			sprintSpeed = 0.18f;
+	static final float walkSpeed = 0.035f, runSpeed = 0.5f, sprintSpeed = 0.18f;
 	static float speed = runSpeed;
 
 	Vector3f vector = new Vector3f();
 	Vector3f rotation = new Vector3f();
 	Vector3f previous = new Vector3f();
-	boolean moveForward = false, moveBackward = false, strafeLeft = false,
-			strafeRight = false;
+	boolean moveForward = false, moveBackward = false, strafeLeft = false, strafeRight = false;
 	boolean onGround = false, jumping = false, falling = false;
 	boolean walking = false, running = true, sprinting = false;
 	Game world;
 	float yBottom = 0;
 	float yMotion = 0;
 	final float gravity = 0.0155f;
+	boolean forward = false, backward = false, left = false, right = false;
+	boolean shoulderUp = false, shoulderDown = false, shoulderLeft = false, shoulderRight = false, elbowUp = false, 
+			elbowDown = false, wristUp = false, wristDown = false, cameraLeft = false, cameraRight = false;
 
 	public Camera(Game app) {
 		world = app;
@@ -40,6 +41,7 @@ public class Camera {
 		input();
 	}
 
+	// Manual controls
 	public void input() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			moveForward = true;
@@ -69,6 +71,7 @@ public class Camera {
 			Display.destroy();
 			System.exit(0);
 		}
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_V)) {
 			if (Program.top_view) {
 				Program.top_view = false;
@@ -76,6 +79,7 @@ public class Camera {
 				Program.top_view = true;
 			}
 		}
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
 		//	System.out.println(Game.heightmap.toString());
 			System.out.println("{");
@@ -89,6 +93,7 @@ public class Camera {
 			}
 			System.out.println("}");//*/
 		}
+		
 		if (Mouse.isGrabbed()) {
 			float mouseDX = Mouse.getDX() * 0.8f * 0.16f;
 			float mouseDY = Mouse.getDY() * 0.8f * 0.16f;
@@ -107,6 +112,106 @@ public class Camera {
 				rotation.x = 89;
 			}
 		}
+		
+		// Rover controls
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+			System.out.println("Up key pressed");
+			forward = true;
+		} else {
+			forward = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+			System.out.println("Down key pressed");
+			backward = true;
+		} else {
+			backward = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+			System.out.println("Left key pressed");
+			left = true;
+		} else {
+			left = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+			System.out.println("Right key pressed");
+			right = true;
+		} else {
+			right = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_I)) {
+			System.out.println("I key pressed");
+			shoulderUp = true;
+		} else {
+			shoulderUp = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_K)) {
+			System.out.println("K key pressed");
+			shoulderDown = true;
+		} else {
+			shoulderDown = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_J)) {
+			System.out.println("J key pressed");
+			shoulderLeft = true;
+		} else {
+			shoulderLeft = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_L)) {
+			System.out.println("L key pressed");
+			shoulderRight = true;
+		} else {
+			shoulderRight = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_H)) {
+			System.out.println("H key pressed");
+			elbowUp = true;
+		} else {
+			elbowUp = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_N)) {
+			System.out.println("N key pressed");
+			elbowDown = true;
+		} else {
+			elbowDown = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
+			System.out.println("G key pressed");
+			wristUp = true;
+		} else {
+			wristUp = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_B)) {
+			System.out.println("B key pressed");
+			wristDown = true;
+		} else {
+			wristDown = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_Y)) {
+			System.out.println("Y key pressed");
+			cameraLeft = true;
+		} else {
+			cameraLeft = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_U)) {
+			System.out.println("U key pressed");
+			cameraRight = true;
+		} else {
+			cameraRight = false;
+		}
 	}
 
 	public void updatePreviousVector() {
@@ -123,6 +228,7 @@ public class Camera {
 		} else if (running) {
 			speed = runSpeed;
 		}
+		
 		if (moveForward) {
 			vector.x += Math.sin(rotation.y * Math.PI / 180) * speed;
 			vector.z += -Math.cos(rotation.y * Math.PI / 180) * speed;
@@ -130,6 +236,7 @@ public class Camera {
 			Game.rover.x += Math.sin(rotation.y * Math.PI / 180) * speed;
 			Game.rover.z += -Math.cos(rotation.y * Math.PI / 180) * speed;
 		}
+		
 		if (moveBackward) {
 			vector.x -= Math.sin(rotation.y * Math.PI / 180) * speed;
 			vector.z -= -Math.cos(rotation.y * Math.PI / 180) * speed;
@@ -137,22 +244,95 @@ public class Camera {
 			Game.rover.x -= Math.sin(rotation.y * Math.PI / 180) * speed;
 			Game.rover.z -= -Math.cos(rotation.y * Math.PI / 180) * speed;
 		}
+		
 		if (strafeLeft) {
 			vector.x += Math.sin((rotation.y - 90) * Math.PI / 180) * speed;
 			vector.z += -Math.cos((rotation.y - 90) * Math.PI / 180) * speed;
 
 			Game.rover.x += Math.sin((rotation.y - 90) * Math.PI / 180) * speed;
-			Game.rover.z += -Math.cos((rotation.y - 90) * Math.PI / 180)
-					* speed;
+			Game.rover.z += -Math.cos((rotation.y - 90) * Math.PI / 180) * speed;
 		}
+		
 		if (strafeRight) {
 			vector.x += Math.sin((rotation.y + 90) * Math.PI / 180) * speed;
 			vector.z += -Math.cos((rotation.y + 90) * Math.PI / 180) * speed;
 
 			Game.rover.x += Math.sin((rotation.y + 90) * Math.PI / 180) * speed;
-			Game.rover.z += -Math.cos((rotation.y + 90) * Math.PI / 180)
-					* speed;
+			Game.rover.z += -Math.cos((rotation.y + 90) * Math.PI / 180) * speed;
 
+		}
+		
+		// Rover contorls
+		if (forward) {
+			// move rover to direction of head
+			vector.x += Math.cos(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+			vector.z -= Math.sin(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+			
+			Game.rover.x += Math.cos(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+			Game.rover.z -= Math.sin(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+		}
+		
+		if (backward) {
+			// move rover to opposite direction of head
+			vector.x -= Math.cos(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+			vector.z += Math.sin(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+			
+			Game.rover.x -= Math.cos(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+			Game.rover.z += Math.sin(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+		}
+		
+		if (left) {
+			// rotate rover counter-clockwise
+			Game.rover.roverAngle += 1.0;
+		}
+		
+		if (right) {
+			// rotate rover clockwise
+			Game.rover.roverAngle -= 1.0;
+		}
+		
+		if (shoulderUp) {
+			if (Game.rover.shoulderVerticalAngle <= 90)
+				Game.rover.shoulderVerticalAngle += 1;
+		}
+		
+		if (shoulderDown) {
+			if (Game.rover.shoulderVerticalAngle >= -15)
+				Game.rover.shoulderVerticalAngle -= 1;
+		}
+		
+		if (shoulderLeft) {
+			if (Game.rover.shoulderHorizontalAngle <= 90)
+				Game.rover.shoulderHorizontalAngle += 1;
+		}
+		
+		if (shoulderRight) {
+			if (Game.rover.shoulderHorizontalAngle >= -90)
+				Game.rover.shoulderHorizontalAngle -= 1;
+		}
+		
+		if (elbowUp) {
+			Game.rover.elbowAngle += 1;
+		}
+		
+		if (elbowDown) {
+			Game.rover.elbowAngle -= 1;
+		}
+		
+		if (wristUp) {
+			Game.rover.wristAngle += 1;
+		}
+		
+		if (wristDown) {
+			Game.rover.wristAngle -= 1;
+		}
+		
+		if (cameraLeft) {
+			Game.rover.cameraRotationAngle += 1;
+		}
+		
+		if (cameraRight) {
+			Game.rover.cameraRotationAngle -= 1;
 		}
 	}
 }
