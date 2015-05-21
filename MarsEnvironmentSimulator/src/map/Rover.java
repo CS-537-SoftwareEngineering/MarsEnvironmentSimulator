@@ -45,7 +45,7 @@ public class Rover {
 		GL11.glTranslated(0, 0.25, 0); // elevate the body off the ground a bit
 		GL11.glRotated(roverAngle, 0, 1, 0); // ROVER ROTATION
 		// GL11.glRotated(90, 0, 1, 0);
-		// GL11.glColor3f(1.0f, 0.0f, 0.0f);
+		// GL11.glColor3f(1.0f, 1.0f, 1.0f);
 		// sphere = new Sphere();
 		// sphere.draw((float) .5, 10, 10);
 			
@@ -56,7 +56,7 @@ public class Rover {
 		GL11.glPopMatrix();
 		
 		// wheels
-		GL11.glColor3f(0.0f, 1.0f, 0.0f); // GREEN
+//		GL11.glColor3f(0.0f, 1.0f, 0.0f); // GREEN
 		GL11.glPushMatrix();
 		GL11.glTranslated(-0.35, -0.25, 0.3);
 		drawWheel();
@@ -193,6 +193,7 @@ public class Rover {
 		GL11.glVertex3f(side, side, side);
 		GL11.glVertex3f(side, -side, side);
 		GL11.glVertex3f(side, -side, -side);
+		
 		GL11.glEnd();
 	}
 	
