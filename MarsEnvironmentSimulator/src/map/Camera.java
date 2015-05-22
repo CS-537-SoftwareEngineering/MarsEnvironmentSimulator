@@ -41,6 +41,52 @@ public class Camera {
 		input();
 	}
 
+	// Animated controls
+	public void autoInput(int commandNumber, int magnitude) {
+		// commandNumber dictionary
+		// 1 - roverAngle
+		// 2 - shoulderHorizontalAngle
+		// 3 - shoulderVerticalAngle
+		// 4 - elbowAngle
+		// 5 - wristAngle
+		// 6 - cameraRotationAngle
+		// 7 - forward
+		// 8 - backward
+		
+		int counter = 0;
+		
+		switch(commandNumber) {
+		case 1:
+			// degree to turn, + for left turn, - for right turn
+			while (counter != magnitude) {
+				if (counter < magnitude) { // left turn
+					left = true;
+					counter++;
+				} else if (counter > magnitude) { // right turn
+					right = true;
+					counter--;
+				}
+			}
+			left = false;
+			right = false;
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		}
+	}
+	
 	// Manual controls
 	public void input() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
@@ -91,7 +137,7 @@ public class Camera {
 				System.out.print(Game.heightmap.getHeightAt(x,Game.heightmap.height[x].length)*Game.heightmapExaggeration);
 				System.out.println("}");
 			}
-			System.out.println("}");//*/
+			System.out.println("}");
 		}
 		
 		if (Mouse.isGrabbed()) {
@@ -114,7 +160,6 @@ public class Camera {
 		}
 		
 		// Rover controls
-		
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			System.out.println("Up key pressed");
 			forward = true;
@@ -270,6 +315,8 @@ public class Camera {
 			
 			Game.rover.x += Math.cos(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
 			Game.rover.z -= Math.sin(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+			
+			Game.rover.wheelAngle -= 3;
 		}
 		
 		if (backward) {
@@ -279,16 +326,20 @@ public class Camera {
 			
 			Game.rover.x -= Math.cos(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
 			Game.rover.z += Math.sin(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+			
+			Game.rover.wheelAngle += 3;
 		}
 		
 		if (left) {
 			// rotate rover counter-clockwise
-			Game.rover.roverAngle += 1.0;
+			Game.rover.roverAngle += 1;
+			rotation.y -= 1;
 		}
 		
 		if (right) {
 			// rotate rover clockwise
-			Game.rover.roverAngle -= 1.0;
+			Game.rover.roverAngle -= 1;
+			rotation.y += 1;
 		}
 		
 		if (shoulderUp) {

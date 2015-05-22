@@ -6,7 +6,7 @@ import org.lwjgl.util.glu.Sphere;
 
 public class Rover {
 	double x, y, z;
-	double roverAngle, shoulderHorizontalAngle, shoulderVerticalAngle, elbowAngle, wristAngle, cameraAngle, cameraRotationAngle;
+	int roverAngle, shoulderHorizontalAngle, shoulderVerticalAngle, elbowAngle, wristAngle, cameraAngle, cameraRotationAngle, wheelAngle;
 	boolean cameraOn;
 	Cylinder cylinder;
 	Sphere joint;
@@ -17,12 +17,13 @@ public class Rover {
 		this.y = 0;
 		this.z = 0;
 		this.roverAngle = 0;
-		this.shoulderHorizontalAngle = 0;
-		this.shoulderVerticalAngle = 0;
-		this.elbowAngle = 0;
+		this.shoulderHorizontalAngle = -90;
+		this.shoulderVerticalAngle = 17;
+		this.elbowAngle = 163;
 		this.wristAngle = 0;
 		this.cameraAngle = 0;
 		this.cameraRotationAngle = 0;
+		this.wheelAngle = 0;
 		this.cameraOn = true;
 		
 		cylinder = new Cylinder();
@@ -50,40 +51,47 @@ public class Rover {
 		// sphere.draw((float) .5, 10, 10);
 			
 		// body
+		colorWhite();
 		GL11.glPushMatrix();
 		GL11.glScaled(1, 0.5, 0.7);
 		drawCube(0.5f);
 		GL11.glPopMatrix();
 		
 		// wheels
-//		GL11.glColor3f(0.0f, 1.0f, 0.0f); // GREEN
+		colorBlack();
 		GL11.glPushMatrix();
 		GL11.glTranslated(-0.35, -0.25, 0.3);
+		GL11.glRotated(wheelAngle, 0, 0, 1);
 		drawWheel();
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
 		GL11.glTranslated(0, -0.25, 0.3);
+		GL11.glRotated(wheelAngle, 0, 0, 1);
 		drawWheel();
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
 		GL11.glTranslated(0.35, -0.25, 0.3);
+		GL11.glRotated(wheelAngle, 0, 0, 1);
 		drawWheel();
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
 		GL11.glTranslated(-0.35, -0.25, -0.5);
+		GL11.glRotated(wheelAngle, 0, 0, 1);
 		drawWheel();
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
 		GL11.glTranslated(0, -0.25, -0.5);
+		GL11.glRotated(wheelAngle, 0, 0, 1);
 		drawWheel();
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
 		GL11.glTranslated(0.35, -0.25, -0.5);
+		GL11.glRotated(wheelAngle, 0, 0, 1);
 		drawWheel();
 		GL11.glPopMatrix();
 		
 		// shoulder
-		joint = new Sphere();
+		colorBlack();
 		GL11.glPushMatrix(); // push for shoulder
 		GL11.glTranslated(0.55, 0, -0.2);
 		GL11.glRotated(shoulderHorizontalAngle, 0, 1, 0); // SHOULDER HORIZONTAL ROTATION
@@ -91,34 +99,35 @@ public class Rover {
 		joint.draw(0.1f, 10, 10);
 		
 		// upper arm
-		GL11.glColor3f(0.0f, 0.0f, 1.0f); // BLUE
+		colorWhite();
 		GL11.glPushMatrix();
 		GL11.glRotated(90, 0, 1, 0);
 		cylinder.draw(0.035f, 0.035f, 0.4f, 10, 10);
 		GL11.glPopMatrix();
 		
 		// elbow
-		GL11.glColor3f(0.0f, 1.0f, 0.0f); // GREEN
+		colorBlack();
 		GL11.glPushMatrix(); // push for elbow
 		GL11.glTranslated(0.45, 0, 0);
 		GL11.glRotated(elbowAngle, 0, 0, 1); // ELBOW VERTICAL ROTATION
 		joint.draw(0.07f, 10, 10);
 		
 		// lower arm
-		GL11.glColor3f(0.0f, 0.0f, 1.0f); // BLUE
+		colorWhite();
 		GL11.glPushMatrix();
 		GL11.glRotated(90, 0, 1, 0);
 		cylinder.draw(0.03f, 0.03f, 0.4f, 10, 10);
 		GL11.glPopMatrix();
 		
 		// wrist
-		GL11.glColor3f(0.0f, 1.0f, 0.0f); // GREEN
+		colorBlack();
 		GL11.glPushMatrix(); // push for wrist
 		GL11.glTranslated(0.4, 0, 0);
 		GL11.glRotated(wristAngle, 0, 0, 1); // WRIST VERTICAL ROTATION
 		joint.draw(0.04f, 10, 10);
 		
 		// arm tip
+		colorBlack();
 		GL11.glPushMatrix();
 		GL11.glTranslated(0.1, 0, 0);
 		drawCube(0.07f);
@@ -129,7 +138,7 @@ public class Rover {
 		GL11.glPopMatrix(); // pop for shoulder
 		
 		// top camera joint
-		GL11.glColor3f(0.0f, 1.0f, 0.0f); // GREEN
+		colorSilver();
 		GL11.glPushMatrix(); // camera joint push
 		GL11.glTranslated(0.4, 0.27, 0.25);
 		GL11.glRotated(cameraRotationAngle, 0, 1, 0); // CAMERA HEAD ROTATION
@@ -137,7 +146,7 @@ public class Rover {
 		joint.draw(0.06f, 10, 10);
 		
 		// top camera stick
-		GL11.glColor3f(0.0f, 0.0f, 1.0f); // BLUE
+		colorBlack();
 		GL11.glPushMatrix();
 		GL11.glTranslated(0,  0.05, 0);
 		GL11.glRotated(-90, 1, 0, 0);
@@ -145,6 +154,7 @@ public class Rover {
 		GL11.glPopMatrix();
 		
 		// top camera head
+		colorSilver();
 		GL11.glPushMatrix();
 		GL11.glTranslated(0, 0.39, 0);
 		GL11.glScaled(0.7, 1, 1.2);
@@ -158,37 +168,43 @@ public class Rover {
 	void drawCube(float side) {
 		GL11.glBegin(GL11.GL_QUADS);
 		
-		GL11.glColor3f(1.0f, 1.0f, 0.0f); // YELLOW
+		// top
+		GL11.glNormal3f(0f, 1f, 0f);
 		GL11.glVertex3f(side, side, -side);
 		GL11.glVertex3f(-side, side, -side);
 		GL11.glVertex3f(-side, side, side);
 		GL11.glVertex3f(side, side, side);
 
-		GL11.glColor3f(1.0f, 0.5f, 0.0f);
+		// bottom
+		GL11.glNormal3f(0f, -1f, 0f);
 		GL11.glVertex3f(side, -side, side);
 		GL11.glVertex3f(-side, -side, side);
 		GL11.glVertex3f(-side, -side, -side);
 		GL11.glVertex3f(side, -side, -side);
 
-		GL11.glColor3f(1.0f, 0.0f, 0.0f); // RED
+		// near
+		GL11.glNormal3f(0f, 0f, 1f);
 		GL11.glVertex3f(side, side, side);
 		GL11.glVertex3f(-side, side, side);
 		GL11.glVertex3f(-side, -side, side);
 		GL11.glVertex3f(side, -side, side);
 
-		GL11.glColor3f(1.0f, 1.0f, 0.0f);
+		// far
+		GL11.glNormal3f(0f, 0f, -1f);
 		GL11.glVertex3f(side, -side, -side);
 		GL11.glVertex3f(-side, -side, -side);
 		GL11.glVertex3f(-side, side, -side);
 		GL11.glVertex3f(side, side, -side);
-
-		GL11.glColor3f(0.0f, 0.0f, 1.0f); // BLUE
+		
+		// left
+		GL11.glNormal3f(-1f, 0f, 0f);
 		GL11.glVertex3f(-side, side, side);
 		GL11.glVertex3f(-side, side, -side);
 		GL11.glVertex3f(-side, -side, -side);
 		GL11.glVertex3f(-side, -side, side);
 
-		GL11.glColor3f(1.0f, 0.0f, 1.0f);
+		// right
+		GL11.glNormal3f(1f, 0f, 0f);
 		GL11.glVertex3f(side, side, -side);
 		GL11.glVertex3f(side, side, side);
 		GL11.glVertex3f(side, -side, side);
@@ -199,5 +215,17 @@ public class Rover {
 	
 	void drawWheel() {
 		cylinder.draw(0.15f, 0.15f, 0.2f, 10, 10);
+	}
+	
+	void colorSilver() {
+		GL11.glColor3f(0.7f, 0.7f, 0.7f); // SILVER
+	}
+	
+	void colorBlack() {
+		GL11.glColor3f(0.0f, 0.0f, 0.0f); // BLACK
+	}
+	
+	void colorWhite() {
+		GL11.glColor3f(1.0f, 0.5f, 0.0f); // WHITE
 	}
 }
