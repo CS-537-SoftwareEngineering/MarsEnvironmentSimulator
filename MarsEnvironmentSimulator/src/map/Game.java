@@ -81,7 +81,7 @@ public class Game {
 			for(int y=0;y<heightmap.height[x].length;y++){
 				//float c = 0.1f+(rng.nextFloat()/5f);
 				float color = heightmap.getHeightAt(x, y);
-				float scale = (float) .25;
+				float scale = (float) 1.0;
 				GL11.glColor3f(color, color, color);
 				float[] p1 = {x*0.25f, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*0.25f};
 				float[] p2 = {(x+1)*0.25f, heightmap.getHeightAt(x+1, y)*heightmapExaggeration, y*0.25f};
