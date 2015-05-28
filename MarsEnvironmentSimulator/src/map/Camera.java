@@ -12,14 +12,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
-
-	/*
-	 * NOTE ------------ This is actually a rip of code from the qjuake engine
-	 * that has been ripped up to rid of the gravity and jumping. Unfortunately,
-	 * the variables for gravity/jumping are still here doing nothing at all.
-	 * Just ignore them. Or re-implement jumping/gravity. That should be fun.
-	 */
-
+	
 	static final float walkSpeed = 0.035f, runSpeed = 0.5f, sprintSpeed = 0.18f;
 	static float speed = runSpeed;
 
@@ -56,6 +49,7 @@ public class Camera {
 	int magnitudeValue = 0;
 	int magnitudeCounter = 0;
 	String[] arr;
+	CallBack cb = new CallBack();
 	
 	public void animation() throws Exception {
 		// Keep reading the cmd.txt file in the loop
@@ -161,6 +155,11 @@ public class Camera {
 			
 			if (magnitudeCounter == 0)
 				cmdList.remove();
+			
+			if (cmdList.size() == 0) {
+				System.out.println("Finished executing commands.");
+				cb.done();
+			}
 		}
 	}
 	
