@@ -6,7 +6,7 @@ import org.lwjgl.util.glu.Sphere;
 
 public class Rover {
 	double x, y, z;
-	int roverAngle, shoulderHorizontalAngle, shoulderVerticalAngle, elbowAngle, wristAngle, cameraAngle, cameraRotationAngle, wheelAngle;
+	double roverAngle, shoulderHorizontalAngle, shoulderVerticalAngle, elbowAngle, wristAngle, cameraAngle, cameraRotationAngle, wheelAngle;
 	boolean cameraOn;
 	Cylinder cylinder;
 	Sphere joint;

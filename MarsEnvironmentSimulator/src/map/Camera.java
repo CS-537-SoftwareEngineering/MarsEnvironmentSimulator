@@ -1,5 +1,11 @@
 package map;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.StringReader;
+import java.util.LinkedList;
+import java.util.Queue;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -35,57 +41,148 @@ public class Camera {
 		world = app;
 	}
 
-	public void update() {
+	public void update() throws Exception {
 		updatePreviousVector();
 		updateMotion();
 		input();
+		animation();
 	}
 
-	// Animated controls
-	public void autoInput(int commandNumber, int magnitude) {
-		// commandNumber dictionary
-		// 1 - roverAngle
-		// 2 - shoulderHorizontalAngle
-		// 3 - shoulderVerticalAngle
-		// 4 - elbowAngle
-		// 5 - wristAngle
-		// 6 - cameraRotationAngle
-		// 7 - forward
-		// 8 - backward
+	// ==================== START OF AUTOMATION CODE ======================
+	String oldCmd = "";
+	String newCmd = "";
+	String line = "";
+	Queue<String> cmdList = new LinkedList<String>();
+	int magnitudeValue = 0;
+	int magnitudeCounter = 0;
+	String[] arr;
+	
+	public void animation() throws Exception {
+		// Keep reading the cmd.txt file in the loop
+		try {
+			newCmd = commandReader();
+		} catch (Exception e) {
+			System.out.println("Error reading cmd.txt!");
+		}
 		
-		int counter = 0;
-		
-		switch(commandNumber) {
-		case 1:
-			// degree to turn, + for left turn, - for right turn
-			while (counter != magnitude) {
-				if (counter < magnitude) { // left turn
-					left = true;
-					counter++;
-				} else if (counter > magnitude) { // right turn
-					right = true;
-					counter--;
-				}
+		// Only execute when cmd.txt changes
+		if (!newCmd.equals(oldCmd)) {
+			oldCmd = newCmd;
+			
+			BufferedReader cmdReader = new BufferedReader(new StringReader(oldCmd));
+			
+			while ((line = cmdReader.readLine()) != null) {
+				// Loads command list
+				cmdList.add(line);
 			}
-			left = false;
-			right = false;
-			break;
-		case 2:
-			break;
-		case 3:
-			break;
-		case 4:
-			break;
-		case 5:
-			break;
-		case 6:
-			break;
-		case 7:
-			break;
-		case 8:
-			break;
+		}
+		
+		// Only execute when the command list is loaded and there are no remaining iterations of command to perform
+		if (cmdList.size() > 0 && magnitudeCounter == 0) {
+			arr = cmdList.peek().split(" ");
+			magnitudeValue = Integer.parseInt(arr[1]);
+			magnitudeCounter = Math.abs(magnitudeValue);
+		}
+		
+		if (cmdList.size() > 0 && magnitudeCounter > 0) {
+			switch(arr[0]) {
+			case "ROV_ROTATE":
+				if (magnitudeValue > 0) { // rotate left
+					Game.rover.roverAngle++;
+					rotation.y--;
+				} else if (magnitudeValue < 0) { // rotate right
+					Game.rover.roverAngle--;
+					rotation.y++;
+				}
+				break;
+			case "ROV_MOVE":
+				if (magnitudeValue > 0) { // move forward
+					vector.x += Math.cos(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+					vector.z -= Math.sin(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+					
+					Game.rover.x += Math.cos(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+					Game.rover.z -= Math.sin(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+					
+					Game.rover.wheelAngle -= 3;
+				} else if (magnitudeValue < 0) { // move backward
+					vector.x -= Math.cos(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+					vector.z += Math.sin(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+					
+					Game.rover.x -= Math.cos(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+					Game.rover.z += Math.sin(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
+					
+					Game.rover.wheelAngle += 3;
+				}
+				break;
+			case "ROV_SHOULDER_HORIZONTAL":
+				if (magnitudeValue > 0) { // shoulder left
+					if (Game.rover.shoulderHorizontalAngle <= 90)
+						Game.rover.shoulderHorizontalAngle++;
+				} else if (magnitudeValue < 0) { // shoulder right
+					if (Game.rover.shoulderHorizontalAngle >= -90)
+						Game.rover.shoulderHorizontalAngle--;
+				}
+				break;
+			case "ROV_SHOULDER_VERTICAL":
+				if (magnitudeValue > 0) { // shoulder up
+					if (Game.rover.shoulderVerticalAngle <= 90)
+						Game.rover.shoulderVerticalAngle++;
+				} else if (magnitudeValue < 0) { // shoulder down
+					if (Game.rover.shoulderVerticalAngle >= -15)
+						Game.rover.shoulderVerticalAngle--;
+				}
+				break;
+			case "ROV_ELBOW":
+				if (magnitudeValue > 0) { // elbow up
+					Game.rover.elbowAngle++;
+				} else if (magnitudeValue < 0) { // elbow down
+					Game.rover.elbowAngle--;
+				}
+				break;
+			case "ROV_WRIST":
+				if (magnitudeValue > 0) {
+					Game.rover.wristAngle++;
+				} else if (magnitudeValue < 0) {
+					Game.rover.wristAngle--;
+				}
+				break;
+			case "ROV_CAMERA":
+				if (magnitudeValue > 0) {
+					Game.rover.cameraRotationAngle++;
+				} else if (magnitudeValue < 0) {
+					Game.rover.cameraRotationAngle--;
+				}
+				break;
+			default:
+				break;
+			}
+			
+			magnitudeCounter--;
+			
+			if (magnitudeCounter == 0)
+				cmdList.remove();
 		}
 	}
+	
+	// Reads the command file and return 1 string variable that holds all commands in file
+	public String commandReader() throws Exception {
+		BufferedReader br = new BufferedReader(new FileReader("C:\\svn\\classes\\2015spring\\cs537\\cmd.txt"));
+	    
+		try {
+	        StringBuilder sb = new StringBuilder();
+	        String line = br.readLine();
+
+	        while (line != null) {
+	            sb.append(line);
+	            sb.append("\n");
+	            line = br.readLine();
+	        }
+	        return sb.toString();
+	    } finally {
+	        br.close();
+	    }
+	}
+	// ==================== END OF AUTOMATION CODE ======================
 	
 	// Manual controls
 	public void input() {
@@ -137,7 +234,7 @@ public class Camera {
 				System.out.print(Game.heightmap.getHeightAt(x,Game.heightmap.height[x].length)*Game.heightmapExaggeration);
 				System.out.println("}");
 			}
-			System.out.println("}");
+			System.out.println("}");//*/
 		}
 		
 		if (Mouse.isGrabbed()) {
@@ -161,98 +258,84 @@ public class Camera {
 		
 		// Rover controls
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-			System.out.println("Up key pressed");
 			forward = true;
 		} else {
 			forward = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-			System.out.println("Down key pressed");
 			backward = true;
 		} else {
 			backward = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			System.out.println("Left key pressed");
 			left = true;
 		} else {
 			left = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-			System.out.println("Right key pressed");
 			right = true;
 		} else {
 			right = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_I)) {
-			System.out.println("I key pressed");
 			shoulderUp = true;
 		} else {
 			shoulderUp = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_K)) {
-			System.out.println("K key pressed");
 			shoulderDown = true;
 		} else {
 			shoulderDown = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_J)) {
-			System.out.println("J key pressed");
 			shoulderLeft = true;
 		} else {
 			shoulderLeft = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_L)) {
-			System.out.println("L key pressed");
 			shoulderRight = true;
 		} else {
 			shoulderRight = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_H)) {
-			System.out.println("H key pressed");
 			elbowUp = true;
 		} else {
 			elbowUp = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_N)) {
-			System.out.println("N key pressed");
 			elbowDown = true;
 		} else {
 			elbowDown = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
-			System.out.println("G key pressed");
 			wristUp = true;
 		} else {
 			wristUp = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_B)) {
-			System.out.println("B key pressed");
 			wristDown = true;
 		} else {
 			wristDown = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_Y)) {
-			System.out.println("Y key pressed");
 			cameraLeft = true;
 		} else {
 			cameraLeft = false;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_U)) {
-			System.out.println("U key pressed");
 			cameraRight = true;
 		} else {
 			cameraRight = false;
@@ -307,7 +390,7 @@ public class Camera {
 
 		}
 		
-		// Rover contorls
+		// Rover controls
 		if (forward) {
 			// move rover to direction of head
 			vector.x += Math.cos(Game.rover.roverAngle * Math.PI / 180) * speed * 0.1;
@@ -332,13 +415,13 @@ public class Camera {
 		
 		if (left) {
 			// rotate rover counter-clockwise
-			Game.rover.roverAngle += 1;
+			Game.rover.roverAngle += 1.0;
 			rotation.y -= 1;
 		}
 		
 		if (right) {
 			// rotate rover clockwise
-			Game.rover.roverAngle -= 1;
+			Game.rover.roverAngle -= 1.0;
 			rotation.y += 1;
 		}
 		

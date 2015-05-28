@@ -18,7 +18,8 @@ public class Game {
 	static Rover rover = new Rover();
 	
 	int terrainPtr;
-	public static final int heightmapExaggeration = 7;
+//	public static final int heightmapExaggeration = 7;
+	public static final int heightmapExaggeration = 28;
 
 	public Game(){
 		//Load the heightmap from file height.jpg (See Heightmap.java)
@@ -38,7 +39,7 @@ public class Game {
 		}
 	}
 	
-	public void update() {
+	public void update() throws Exception {
 		camera.update();
 	}
 
@@ -59,7 +60,8 @@ public class Game {
 		GL11.glTranslatef(-camera.vector.x, -camera.vector.y-1.4f, -camera.vector.z);
 		
 		//Bi-linear interpolation to calculate where the player should be vertically on the terrain.
-		camera.vector.y = heightmap.calculateHeight(camera.vector.x*4, camera.vector.z*4)*heightmapExaggeration;
+//		camera.vector.y = heightmap.calculateHeight(camera.vector.x*4, camera.vector.z*4)*heightmapExaggeration;
+		camera.vector.y = heightmap.calculateHeight(camera.vector.x, camera.vector.z)*heightmapExaggeration;
 		
 		rover.renderRover(camera.vector.y+.5f);
 		
@@ -81,7 +83,7 @@ public class Game {
 			for(int y=0;y<heightmap.height[x].length;y++){
 				//float c = 0.1f+(rng.nextFloat()/5f);
 				float color = heightmap.getHeightAt(x, y);
-				float scale = (float) 1.0;
+				float scale = (float)1.0;
 				GL11.glColor3f(color, color, color);
 				float[] p1 = {x*0.25f, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*0.25f};
 				float[] p2 = {(x+1)*0.25f, heightmap.getHeightAt(x+1, y)*heightmapExaggeration, y*0.25f};

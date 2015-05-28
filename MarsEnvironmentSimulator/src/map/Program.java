@@ -74,11 +74,15 @@ public class Program {
 		game = new Game();
 		
 		//Main game loop.
-		while(!Display.isCloseRequested()){
+		while(!Display.isCloseRequested()) {
 			//Clear the screen, reset translations
 			clearGL();
 			
-			update();
+			try {
+				update();
+			} catch (Exception e) {
+				System.out.println("Error calling update()");
+			}
 			render();
 			
 			Display.update();
@@ -96,7 +100,7 @@ public class Program {
 	static boolean top_view = false;
 	 
 
-	private static void update() {
+	private static void update() throws Exception {
 		game.update();
 	}
 	
