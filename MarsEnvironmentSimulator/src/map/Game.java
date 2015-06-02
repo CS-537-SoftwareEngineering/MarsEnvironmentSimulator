@@ -7,6 +7,7 @@ import org.lwjgl.util.glu.GLU;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
+import org.lwjgl.util.glu.Sphere;
 
 
 public class Game {
@@ -16,6 +17,7 @@ public class Game {
 	static Heightmap heightmap;
 	Texture floor;
 	static Rover rover = new Rover();
+	Sphere rock;
 	
 	int terrainPtr;
 //	public static final int heightmapExaggeration = 7;
@@ -25,6 +27,7 @@ public class Game {
 		//Load the heightmap from file height.jpg (See Heightmap.java)
 		heightmap = new Heightmap("img/map2.jpg");
 		System.out.println("Loaded heightmap.");
+		rock = new Sphere();
 		
 		//Generate the terrain and store in video memory
 		generateLists();
@@ -77,7 +80,6 @@ public class Game {
 		//Doing this sped things up a lot, even for my 3.5GHz 6-core CPU, 1GB GTX 650 Ti setup.
 		terrainPtr = GL11.glGenLists(1);
 		GL11.glNewList(terrainPtr, GL11.GL_COMPILE);
-		
 		GL11.glBegin(GL11.GL_QUADS);
 		for(int x=0;x<heightmap.height.length;x++){
 			for(int y=0;y<heightmap.height[x].length;y++){
@@ -85,10 +87,10 @@ public class Game {
 				float color = heightmap.getHeightAt(x, y);
 				float scale = (float)1.0;
 				GL11.glColor3f(color, color, color);
-				float[] p1 = {x*0.25f, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*0.25f};
-				float[] p2 = {(x+1)*0.25f, heightmap.getHeightAt(x+1, y)*heightmapExaggeration, y*0.25f};
-				float[] p3 = {(x+1)*0.25f, heightmap.getHeightAt(x+1, y+1)*heightmapExaggeration, (y+1)*0.25f};
-				float[] p4 = {x*0.25f, heightmap.getHeightAt(x, y+1)*heightmapExaggeration, (y+1)*0.25f};
+				float[] p1 = {x*scale, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*scale};
+				float[] p2 = {(x+1)*scale, heightmap.getHeightAt(x+1, y)*heightmapExaggeration, y*scale};
+				float[] p3 = {(x+1)*scale, heightmap.getHeightAt(x+1, y+1)*heightmapExaggeration, (y+1)*scale};
+				float[] p4 = {x*scale, heightmap.getHeightAt(x, y+1)*heightmapExaggeration, (y+1)*scale};
 //				GL11.glColor3f(1.0f, 1.0f, 1.0f);
 				GL11.glTexCoord2f(0, 0);
 				float[] n = Vector.getNormal(p1, p2, p4);
@@ -109,6 +111,11 @@ public class Game {
 			}
 		}
 		GL11.glEnd();
+		GL11.glPushMatrix();
+		GL11.glTranslated(139, heightmap.getHeightAt(139, 85)*heightmapExaggeration, 85);
+		rock.draw(0.24f, 10, 10);
+		GL11.glPopMatrix();
+		
 		GL11.glEndList();
 	}
 }

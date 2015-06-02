@@ -32,6 +32,8 @@ public class Camera {
 
 	public Camera(Game app) {
 		world = app;
+		vector.x = 129;
+		vector.z = 65;
 	}
 
 	public void update() throws Exception {

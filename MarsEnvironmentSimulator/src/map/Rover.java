@@ -13,9 +13,9 @@ public class Rover {
 
 	public Rover() {
 		// Initial values
-		this.x = 0;
+		this.x = 129;
 		this.y = 0;
-		this.z = 0;
+		this.z = 65;
 		this.roverAngle = 0;
 		this.shoulderHorizontalAngle = -90;
 		this.shoulderVerticalAngle = 17;
