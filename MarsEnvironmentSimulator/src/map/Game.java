@@ -1,4 +1,5 @@
 package map;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
@@ -18,7 +19,8 @@ public class Game {
 	static Rover rover = new Rover();
 	
 	int terrainPtr;
-	public static final int heightmapExaggeration = 7;
+	public static final float scale = 1;
+	public static final int heightmapExaggeration = (int)scale * 28;
 
 	public Game(){
 		//Load the heightmap from file height.jpg (See Heightmap.java)
@@ -56,7 +58,7 @@ public class Game {
 		GL11.glTranslatef(-camera.vector.x, -camera.vector.y-1.4f, -camera.vector.z);
 		
 		//Bi-linear interpolation to calculate where the player should be vertically on the terrain.
-		camera.vector.y = heightmap.calculateHeight(camera.vector.x*4, camera.vector.z*4)*heightmapExaggeration;
+		camera.vector.y = heightmap.calculateHeight(camera.vector.x * (1/scale), camera.vector.z * (1/scale))*heightmapExaggeration;
 
 		
 		rover.renderRover(camera.vector.y+.5f);
@@ -77,6 +79,17 @@ public class Game {
 		terrainPtr = GL11.glGenLists(1);
 		GL11.glNewList(terrainPtr, GL11.GL_COMPILE);
 		
+		String myFilePath = "C:\\Users\\todd\\Desktop\\normalMap.txt";
+		
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(myFilePath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
 		GL11.glBegin(GL11.GL_QUADS);
 		for(int x=0;x<heightmap.height.length;x++){
 			for(int y=0;y<heightmap.height[x].length;y++){
@@ -89,21 +102,32 @@ public class Game {
 				GL11.glColor3f(1.0f, 1.0f, 1.0f);
 				GL11.glTexCoord2f(0, 0);
 				float[] n = Vector.getNormal(p1, p2, p4);
+				try {
+					writer.write("[" + x + "]" + "[" + y + "]"+ "<" + n[0] + ", " + n[1] + ", " + n[2] + ">\r\n");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				GL11.glNormal3f(n[0], n[1], n[2]);
-				GL11.glVertex3f(x*0.25f, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*0.25f);
+				GL11.glVertex3f(x*scale, heightmap.getHeightAt(x, y)*heightmapExaggeration, y*scale);
 				GL11.glTexCoord2f(1, 0);
 				n = Vector.getNormal(p2, p1, p3);
 				GL11.glNormal3f(n[0], n[1], n[2]);
-				GL11.glVertex3f((x+1)*0.25f, heightmap.getHeightAt(x+1, y)*heightmapExaggeration, y*0.25f);
+				GL11.glVertex3f((x+1)*scale, heightmap.getHeightAt(x+1, y)*heightmapExaggeration, y*scale);
 				GL11.glTexCoord2f(1, 1);
 				n = Vector.getNormal(p3, p4, p2);
 				GL11.glNormal3f(n[0], n[1], n[2]);
-				GL11.glVertex3f((x+1)*0.25f, heightmap.getHeightAt(x+1, y+1)*heightmapExaggeration, (y+1)*0.25f);
+				GL11.glVertex3f((x+1)*scale, heightmap.getHeightAt(x+1, y+1)*heightmapExaggeration, (y+1)*scale);
 				GL11.glTexCoord2f(0, 1);
 				n = Vector.getNormal(p4, p1, p3);
 				GL11.glNormal3f(n[0], n[1], n[2]);
-				GL11.glVertex3f(x*0.25f, heightmap.getHeightAt(x, y+1)*heightmapExaggeration, (y+1)*0.25f);
+				GL11.glVertex3f(x*scale, heightmap.getHeightAt(x, y+1)*heightmapExaggeration, (y+1)*scale);
 			}
+		}
+		// Close the Writer
+		try {
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		GL11.glEnd();
 		GL11.glEndList();
