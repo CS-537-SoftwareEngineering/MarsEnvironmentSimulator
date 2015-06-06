@@ -7,15 +7,15 @@ import org.lwjgl.util.glu.Sphere;
 public class Rover {
 	double x, y, z;
 	double roverAngle, shoulderHorizontalAngle, shoulderVerticalAngle, elbowAngle, wristAngle, cameraAngle, cameraRotationAngle, wheelAngle;
-	boolean cameraOn;
+	boolean cameraOn, laserOn;
 	Cylinder cylinder;
 	Sphere joint;
 
 	public Rover() {
 		// Initial values
-		this.x = 0;
+		this.x = 172;
 		this.y = 0;
-		this.z = 0;
+		this.z = 140;
 		this.roverAngle = 0;
 		this.shoulderHorizontalAngle = -90;
 		this.shoulderVerticalAngle = 17;
@@ -25,17 +25,10 @@ public class Rover {
 		this.cameraRotationAngle = 0;
 		this.wheelAngle = 0;
 		this.cameraOn = true;
+		this.laserOn = false;
 		
 		cylinder = new Cylinder();
 		joint = new Sphere();
-
-//		GL11.glPushMatrix();
-//		GL11.glTranslated(x,y,z);
-//		GL11.glRotated(90,0,1,0);
-//		GL11.glColor3f(0.0f, 1.0f, 0.0f);
-//		sphere = new Sphere();
-//		sphere.draw((float) .5, 10, 10);
-//		GL11.glPopMatrix();
 	}
 
 	void renderRover(double height) {
@@ -45,10 +38,6 @@ public class Rover {
 		GL11.glTranslated(this.x, this.y, this.z); // ROVER MOVEMENT
 		GL11.glTranslated(0, 0.25, 0); // elevate the body off the ground a bit
 		GL11.glRotated(roverAngle, 0, 1, 0); // ROVER ROTATION
-		// GL11.glRotated(90, 0, 1, 0);
-		// GL11.glColor3f(1.0f, 1.0f, 1.0f);
-		// sphere = new Sphere();
-		// sphere.draw((float) .5, 10, 10);
 			
 		// body
 		colorWhite();
@@ -161,6 +150,18 @@ public class Rover {
 		drawCube(0.07f);
 		GL11.glPopMatrix();
 		
+		// laser
+		if (laserOn) {
+			colorRed();
+			GL11.glPushMatrix();
+			GL11.glTranslated(0, 0.39, 0);
+			GL11.glBegin(GL11.GL_LINE_STRIP);
+			GL11.glVertex3f(0.0f, 0.0f, 0.0f);
+			GL11.glVertex3f(100.0f, -30.0f, 0.0f);
+			GL11.glEnd();
+			GL11.glPopMatrix();
+		}
+		
 		GL11.glPopMatrix(); // camera joint pop
 		GL11.glPopMatrix(); // pop for whole thing
 	}
@@ -227,5 +228,9 @@ public class Rover {
 	
 	void colorWhite() {
 		GL11.glColor3f(1.0f, 0.5f, 0.0f); // WHITE
+	}
+	
+	void colorRed() {
+		GL11.glColor3f(1.0f, 0.0f, 0.0f); // RED
 	}
 }

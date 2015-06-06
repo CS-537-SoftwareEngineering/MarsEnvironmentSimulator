@@ -32,6 +32,10 @@ public class Camera {
 
 	public Camera(Game app) {
 		world = app;
+		// Initalize camera position
+		vector.x = (float)Game.rover.x;
+		vector.y = (float)Game.rover.y;
+		vector.z = (float)Game.rover.z;
 	}
 
 	public void update() throws Exception {
@@ -73,6 +77,7 @@ public class Camera {
 		
 		// Only execute when the command list is loaded and there are no remaining iterations of command to perform
 		if (cmdList.size() > 0 && magnitudeCounter == 0) {
+			System.out.println(cmdList.peek()); // output the currently executing command
 			arr = cmdList.peek().split(" ");
 			magnitudeValue = Integer.parseInt(arr[1]);
 			magnitudeCounter = Math.abs(magnitudeValue);
@@ -147,14 +152,23 @@ public class Camera {
 					Game.rover.cameraRotationAngle--;
 				}
 				break;
+			case "ROV_STANDBY":
+				// Do nothing!
+				break;
+			case "ROV_LASER":
+				Game.rover.laserOn = true;
+				break;
 			default:
 				break;
 			}
 			
 			magnitudeCounter--;
 			
-			if (magnitudeCounter == 0)
+			if (magnitudeCounter == 0) {
+				if (Game.rover.laserOn)
+					Game.rover.laserOn = false;
 				cmdList.remove();
+			}
 			
 			if (cmdList.size() == 0) {
 				System.out.println("Finished executing commands.");
@@ -339,6 +353,16 @@ public class Camera {
 		} else {
 			cameraRight = false;
 		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_T)) {
+			Game.rover.laserOn = true;
+		} else {
+			Game.rover.laserOn = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_X)) {
+			System.out.println("(" + Game.rover.x + ", " + Game.rover.z);
+		}
 	}
 
 	public void updatePreviousVector() {
@@ -444,28 +468,22 @@ public class Camera {
 				Game.rover.shoulderHorizontalAngle -= 1;
 		}
 		
-		if (elbowUp) {
-			Game.rover.elbowAngle += 1;
-		}
+		if (elbowUp)
+			Game.rover.elbowAngle++;
 		
-		if (elbowDown) {
-			Game.rover.elbowAngle -= 1;
-		}
+		if (elbowDown)
+			Game.rover.elbowAngle--;
 		
-		if (wristUp) {
-			Game.rover.wristAngle += 1;
-		}
+		if (wristUp)
+			Game.rover.wristAngle++;
 		
-		if (wristDown) {
-			Game.rover.wristAngle -= 1;
-		}
+		if (wristDown)
+			Game.rover.wristAngle--;
 		
-		if (cameraLeft) {
-			Game.rover.cameraRotationAngle += 1;
-		}
+		if (cameraLeft)
+			Game.rover.cameraRotationAngle++;
 		
-		if (cameraRight) {
-			Game.rover.cameraRotationAngle -= 1;
-		}
+		if (cameraRight)
+			Game.rover.cameraRotationAngle--;
 	}
 }

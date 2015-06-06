@@ -13,8 +13,7 @@ import generic.RoverClientRunnable;
 
 public class CallBackClient extends RoverClientRunnable {
 
-	public CallBackClient(int port, InetAddress host)
-			throws UnknownHostException {
+	public CallBackClient(int port, InetAddress host) throws UnknownHostException {
 		super(port, host);
 	}
 
@@ -37,7 +36,7 @@ public class CallBackClient extends RoverClientRunnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception error) {
-			System.out.println("Client: Error:" + error.getMessage());
+			System.out.println("Client Error:" + error.getMessage());
 		}
 	}
 }
